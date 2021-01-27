@@ -37,6 +37,15 @@ namespace PortKiller
 
         private void SearchBtn_Click(object sender, EventArgs e)
         {
+            // 方便后面设计一键查杀调用
+            Do_Process();
+        }
+
+        private void Do_Process()
+        {
+            // 清空之前的数据
+            this.BindDataGridView.Rows.Clear();
+
             string PortInputText = this.PortInput.Text;
             if (PortInputText.Length == 0)
             {
@@ -52,18 +61,8 @@ namespace PortKiller
 
             int port;
             int.TryParse(PortInputText, out port);
-            Do_Process(port);
-        }
 
-        private void Do_Process(int port)
-        {
-            Process p = new Process();
-            p.StartInfo.FileName = "cmd.exe";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardError = true;
-            p.StartInfo.RedirectStandardInput = true;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.CreateNoWindow = true;
+            Process p = Get_Process("cmd.exe");
 
             // 获取端口号相关的pid
             List<int> pid_list = Get_Pid_By_Port(p, port);
@@ -78,11 +77,17 @@ namespace PortKiller
             // 关闭process进程
             p.Close();
 
+            if (process_list.Count == 0)
+            {
+                MessageBox.Show("端口[" + port + "]未被占用", "提示", MessageBoxButtons.OK);
+                return;
+            }
+
             // 填充数据到窗体
             int i = 0;
-            // 清空之前的数据
-            this.BindDataGridView.Rows.Clear();
-            foreach (var dataBean in process_list) { 
+
+            foreach (var dataBean in process_list)
+            {
                 this.BindDataGridView.Rows.Add();
                 // 序号
                 this.BindDataGridView.Rows[i].Cells[0].Value = i + 1;
@@ -94,6 +99,18 @@ namespace PortKiller
                 this.BindDataGridView.Rows[i].Cells[3].Value = dataBean.Space;
                 i++;
             }
+        }
+
+        private static Process Get_Process(string fileName)
+        {
+            Process p = new Process();
+            p.StartInfo.FileName = fileName;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.CreateNoWindow = true;
+            return p;
         }
 
         private List<BindData> Get_ProcessName_By_Pid(Process process, List<int> pid_list)
@@ -191,7 +208,52 @@ namespace PortKiller
 
         private void KillBtn_Click(object sender, EventArgs e)
         {
+            // 方便后面设计一键查杀
+            kill();
+        }
 
+        private void kill()
+        {
+            DataGridViewRowCollection rows = this.BindDataGridView.Rows;
+            if (rows == null || rows.Count == 0)
+            {
+                MessageBox.Show("未找到相关进程", "提示", MessageBoxButtons.OK);
+                return;
+            }
+
+            // 第一行
+            DataGridViewRow row = rows[0];
+            // 第二列 pid
+            object pid = row.Cells[1].Value;
+            string killCmd = "taskkill /F /PID " + pid;
+            Console.WriteLine("kill pid: " + pid + "  " + killCmd);
+            Process process = Get_Process("cmd.exe");
+
+            process.Start();
+            process.StandardInput.WriteLine(killCmd);
+            process.StandardInput.WriteLine("exit");
+
+            //StreamReader reader = process.StandardOutput;
+            //string line = reader.ReadLine();
+
+            //while (!reader.EndOfStream)
+            //{
+            //    line = line.Trim();
+            //    Console.WriteLine(line);
+            //    // 读取下一行数据
+            //    line = reader.ReadLine();
+            //}
+            string line = process.StandardOutput.ReadToEnd();
+            Console.WriteLine(line);
+            process.WaitForExit();
+            process.Close();
+            if (line.Contains("成功:"))
+            {
+                MessageBox.Show("进程[" + row.Cells[2].Value + "]已杀死", "提示", MessageBoxButtons.OK);
+            } else
+            {
+                MessageBox.Show("进程[" + row.Cells[2].Value + "]查杀失败, 请尝试以管理员权限运行", "提示", MessageBoxButtons.OK);
+            }
         }
     }
 }
