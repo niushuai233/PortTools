@@ -17,10 +17,16 @@ namespace PortKiller
          */ 
         private void PortInput_KeyPress(Object sender, KeyPressEventArgs e)
         {
-            // 非数字 丢弃
-            if (!Char.IsDigit(e.KeyChar))
+            // 是否是退格键
+            bool BackspaceKey = e.KeyChar == (char) Keys.Back;
+            if (!BackspaceKey)
             {
-                e.Handled = true;
+                // 非退格键
+                // 非数字 丢弃
+                if (!Char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
             }
         }
 
@@ -32,6 +38,17 @@ namespace PortKiller
                 MessageBox.Show("请输入端口号", "提示", MessageBoxButtons.OK);
             }
             
+            if (!Check_Port(PortInputText))
+            {
+                MessageBox.Show("端口号范围1-65535, 请确认", "提示", MessageBoxButtons.OK);
+            }
+            
+        }
+
+        private bool Check_Port(String PortStr)
+        {
+            int port;
+            return int.TryParse(PortStr, out port) && port != 0 && port <= 65535;
         }
 
         private void KillBtn_Click(object sender, EventArgs e)
