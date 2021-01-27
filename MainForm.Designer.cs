@@ -29,6 +29,7 @@ namespace PortKiller
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PortNameDisplay = new System.Windows.Forms.Label();
             this.PortInput = new System.Windows.Forms.TextBox();
             this.SearchBtn = new System.Windows.Forms.Button();
@@ -178,8 +179,10 @@ namespace PortKiller
             this.Controls.Add(this.PortNameDisplay);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.HelpButton = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PortKiller v1.0 @niushuai233";
