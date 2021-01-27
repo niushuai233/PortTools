@@ -38,7 +38,10 @@ namespace PortKiller
             this.taskIdHead = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.exeHead = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FillSpaceHead = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.BindDataGridView)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PortNameDisplay
@@ -145,6 +148,23 @@ namespace PortKiller
             this.FillSpaceHead.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.FillSpaceHead.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AboutToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(508, 25);
+            this.menuStrip1.TabIndex = 5;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // AboutToolStripMenuItem
+            // 
+            this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.AboutToolStripMenuItem.Text = "关于";
+            this.AboutToolStripMenuItem.Click += new System.EventHandler(this.About_ToolStrip_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -156,12 +176,16 @@ namespace PortKiller
             this.Controls.Add(this.SearchBtn);
             this.Controls.Add(this.PortInput);
             this.Controls.Add(this.PortNameDisplay);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PortKiller v1.0 @niushuai233";
             ((System.ComponentModel.ISupportInitialize)(this.BindDataGridView)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -178,6 +202,8 @@ namespace PortKiller
         private System.Windows.Forms.DataGridViewTextBoxColumn taskIdHead;
         private System.Windows.Forms.DataGridViewTextBoxColumn exeHead;
         private System.Windows.Forms.DataGridViewTextBoxColumn FillSpaceHead;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
     }
 }
 

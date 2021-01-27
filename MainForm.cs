@@ -255,5 +255,13 @@ namespace PortKiller
                 MessageBox.Show("进程[" + row.Cells[2].Value + "]查杀失败, 请尝试以管理员权限运行", "提示", MessageBoxButtons.OK);
             }
         }
+        private void About_ToolStrip_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "端口查杀工具v1.0 © 版权所有 2021.1 @niushuai233\n\n" +
+                "主页：https://github.com/niushuai233\n" +
+                "邮箱：shuai.niu@foxmail.com", 
+                "关于", MessageBoxButtons.OK);
+        }
     }
 }
