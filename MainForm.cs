@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -40,11 +41,13 @@ namespace PortKiller
             if (PortInputText.Length == 0)
             {
                 MessageBox.Show("请输入端口号", "提示", MessageBoxButtons.OK);
+                return;
             }
 
             if (!Check_Port(PortInputText))
             {
                 MessageBox.Show("端口号范围1-65535, 请确认", "提示", MessageBoxButtons.OK);
+                return;
             }
 
             int port;
@@ -75,6 +78,22 @@ namespace PortKiller
             // 关闭process进程
             p.Close();
 
+            // 填充数据到窗体
+            int i = 0;
+            // 清空之前的数据
+            this.BindDataGridView.Rows.Clear();
+            foreach (var dataBean in process_list) { 
+                this.BindDataGridView.Rows.Add();
+                // 序号
+                this.BindDataGridView.Rows[i].Cells[0].Value = i + 1;
+                // 进程PID
+                this.BindDataGridView.Rows[i].Cells[1].Value = dataBean.Pid;
+                // 程序名称
+                this.BindDataGridView.Rows[i].Cells[2].Value = dataBean.ProcessName;
+                // 空间占用
+                this.BindDataGridView.Rows[i].Cells[3].Value = dataBean.Space;
+                i++;
+            }
         }
 
         private List<BindData> Get_ProcessName_By_Pid(Process process, List<int> pid_list)
@@ -82,13 +101,14 @@ namespace PortKiller
             // 开启process进程
             process.Start();
             List<BindData> process_list = new List<BindData>();
+            StreamReader reader;
             foreach (var pid in pid_list)
             {
                 // 查找process
                 process.StandardInput.WriteLine(string.Format("tasklist |findstr \"{0}\"", pid));
                 process.StandardInput.WriteLine("exit");
                 // 获取输出内容
-                StreamReader reader = process.StandardOutput;
+                reader = process.StandardOutput;
                 string line = reader.ReadLine();
 
                 while (!reader.EndOfStream)
@@ -100,7 +120,7 @@ namespace PortKiller
                     {
                         Regex regex = new Regex(@"\s+");
                         string[] split_lines = regex.Split(line);
-                        if (split_lines.Length > 0)
+                        if (split_lines.Length > 0 && split_lines[1].Equals(pid + ""))
                         {
                             process_list.Add(new BindData(split_lines[0], int.Parse(split_lines[1]), split_lines[4].Replace(",","") + "k"));
                         }
@@ -108,7 +128,6 @@ namespace PortKiller
                     line = reader.ReadLine();
                 }
                 process.WaitForExit();
-                reader.Close();
             }
             Console.WriteLine("Get_ProcessName_By_Pid Over ============================================");
             return process_list;
