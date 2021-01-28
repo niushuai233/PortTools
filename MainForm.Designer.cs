@@ -42,6 +42,7 @@ namespace PortKiller
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SearchAndKillBtn = new System.Windows.Forms.Button();
+            this.tipsLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.BindDataGridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +51,7 @@ namespace PortKiller
             // 
             this.PortNameDisplay.AutoSize = true;
             this.PortNameDisplay.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PortNameDisplay.Location = new System.Drawing.Point(41, 37);
+            this.PortNameDisplay.Location = new System.Drawing.Point(43, 33);
             this.PortNameDisplay.Name = "PortNameDisplay";
             this.PortNameDisplay.Size = new System.Drawing.Size(47, 17);
             this.PortNameDisplay.TabIndex = 0;
@@ -59,7 +60,7 @@ namespace PortKiller
             // PortInput
             // 
             this.PortInput.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PortInput.Location = new System.Drawing.Point(94, 34);
+            this.PortInput.Location = new System.Drawing.Point(96, 30);
             this.PortInput.MaxLength = 5;
             this.PortInput.Name = "PortInput";
             this.PortInput.Size = new System.Drawing.Size(100, 24);
@@ -70,7 +71,7 @@ namespace PortKiller
             // 
             this.SearchBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.SearchBtn.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.SearchBtn.Location = new System.Drawing.Point(229, 35);
+            this.SearchBtn.Location = new System.Drawing.Point(44, 64);
             this.SearchBtn.Name = "SearchBtn";
             this.SearchBtn.Size = new System.Drawing.Size(75, 23);
             this.SearchBtn.TabIndex = 2;
@@ -81,7 +82,7 @@ namespace PortKiller
             // KillBtn
             // 
             this.KillBtn.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.KillBtn.Location = new System.Drawing.Point(310, 35);
+            this.KillBtn.Location = new System.Drawing.Point(125, 64);
             this.KillBtn.Name = "KillBtn";
             this.KillBtn.Size = new System.Drawing.Size(75, 23);
             this.KillBtn.TabIndex = 3;
@@ -169,7 +170,7 @@ namespace PortKiller
             // 
             // SearchAndKillBtn
             // 
-            this.SearchAndKillBtn.Location = new System.Drawing.Point(391, 36);
+            this.SearchAndKillBtn.Location = new System.Drawing.Point(206, 65);
             this.SearchAndKillBtn.Name = "SearchAndKillBtn";
             this.SearchAndKillBtn.Size = new System.Drawing.Size(75, 23);
             this.SearchAndKillBtn.TabIndex = 6;
@@ -177,12 +178,22 @@ namespace PortKiller
             this.SearchAndKillBtn.UseVisualStyleBackColor = true;
             this.SearchAndKillBtn.Click += new System.EventHandler(this.SearchAndKillBtn_Click);
             // 
+            // tipsLabel
+            // 
+            this.tipsLabel.AutoSize = true;
+            this.tipsLabel.Location = new System.Drawing.Point(206, 36);
+            this.tipsLabel.Name = "tipsLabel";
+            this.tipsLabel.Size = new System.Drawing.Size(53, 12);
+            this.tipsLabel.TabIndex = 7;
+            this.tipsLabel.Text = "等待查询";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(508, 251);
+            this.Controls.Add(this.tipsLabel);
             this.Controls.Add(this.SearchAndKillBtn);
             this.Controls.Add(this.BindDataGridView);
             this.Controls.Add(this.KillBtn);
@@ -197,7 +208,7 @@ namespace PortKiller
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PortKiller v1.0 @niushuai233";
+            this.Text = "PortKiller v1.1 @niushuai233";
             ((System.ComponentModel.ISupportInitialize)(this.BindDataGridView)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -220,6 +231,7 @@ namespace PortKiller
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.Button SearchAndKillBtn;
+        private System.Windows.Forms.Label tipsLabel;
     }
 }
 

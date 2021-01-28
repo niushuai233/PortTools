@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +13,20 @@ namespace PortKiller
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        private void changeBtn(bool status)
+        {
+            this.SearchBtn.Enabled = status;
+            this.KillBtn.Enabled = status;
+            this.SearchAndKillBtn.Enabled = status;
+        }
+
+        private void changeTipsText(string text)
+        {
+            Debug.WriteLine("text: " + text);
+            this.tipsLabel.Text = text;
+            this.Refresh();
         }
 
         /**
@@ -37,10 +52,16 @@ namespace PortKiller
         private void SearchBtn_Click(object sender, EventArgs e)
         {
             // 方便后面设计一键查杀调用
-            Do_Process();
+            changeBtn(false);
+            string do_res = Do_Process();
+            changeBtn(true);
+            if (do_res != null)
+            {
+                MessageBox.Show(do_res, "提示", MessageBoxButtons.OK);
+            }
         }
 
-        private bool Do_Process()
+        private string Do_Process()
         {
             // 清空之前的数据
             this.BindDataGridView.Rows.Clear();
@@ -48,21 +69,23 @@ namespace PortKiller
             string PortInputText = this.PortInput.Text;
             if (PortInputText.Length == 0)
             {
-                MessageBox.Show("请输入端口号", "提示", MessageBoxButtons.OK);
-                return false;
+                return "请输入端口号";
             }
 
             if (!Check_Port(PortInputText))
             {
-                MessageBox.Show("端口号范围1-65535, 请确认", "提示", MessageBoxButtons.OK);
-                return false;
+                return "端口号范围1-65535, 请确认";
             }
+
+            changeTipsText("查询端口[" + this.PortInput.Text + "]占用");
 
             int port;
             int.TryParse(PortInputText, out port);
 
-            Process p = Get_Process("cmd.exe");
+            Thread.Sleep(1000);
 
+            Process p = Get_Process("cmd.exe");
+            
             // 获取端口号相关的pid
             List<int> pid_list = Get_Pid_By_Port(p, port);
 
@@ -70,6 +93,7 @@ namespace PortKiller
 
             // 根据pid获取进程信息
             List<BindData> process_list = Get_ProcessName_By_Pid(p, pid_list);
+            changeTipsText("查询完毕");
 
             Console.WriteLine("process_list: " + string.Join("\n", process_list));
 
@@ -78,8 +102,7 @@ namespace PortKiller
 
             if (process_list.Count == 0)
             {
-                MessageBox.Show("端口[" + port + "]未被占用", "提示", MessageBoxButtons.OK);
-                return false;
+                return "端口[" + port + "]未被占用";
             }
 
             // 填充数据到窗体
@@ -98,7 +121,7 @@ namespace PortKiller
                 this.BindDataGridView.Rows[i].Cells[3].Value = dataBean.Space;
                 i++;
             }
-            return true;
+            return null;
         }
 
         private static Process Get_Process(string fileName)
@@ -214,6 +237,7 @@ namespace PortKiller
 
         private void kill()
         {
+            changeTipsText("进程查杀开始");
             DataGridViewRowCollection rows = this.BindDataGridView.Rows;
             if (rows == null || rows.Count == 0)
             {
@@ -244,7 +268,7 @@ namespace PortKiller
             //    line = reader.ReadLine();
             //}
             string line = process.StandardOutput.ReadToEnd();
-            Console.WriteLine(line);
+
             process.WaitForExit();
             process.Close();
             if (line.Contains("成功:"))
@@ -254,11 +278,12 @@ namespace PortKiller
             {
                 MessageBox.Show("进程[" + row.Cells[2].Value + "]查杀失败, 请尝试以管理员权限运行", "提示", MessageBoxButtons.OK);
             }
+            changeTipsText("进程查杀完成");
         }
         private void About_ToolStrip_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "端口查杀工具v1.0 © 版权所有 2021.1 @niushuai233\n\n" +
+                "端口查杀工具v1.1 © 版权所有 2021.1 @niushuai233\n\n" +
                 "主页：https://github.com/niushuai233\n" +
                 "邮箱：shuai.niu@foxmail.com", 
                 "关于", MessageBoxButtons.OK);
@@ -266,10 +291,13 @@ namespace PortKiller
 
         private void SearchAndKillBtn_Click(object sender, EventArgs e)
         {
-            bool do_res = Do_Process();
-            if (do_res)
+            string do_res = Do_Process();
+            if (null == do_res)
             {
                 kill();
+            } else
+            {
+                MessageBox.Show(do_res, "提示", MessageBoxButtons.OK);
             }
         }
     }
