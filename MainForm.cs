@@ -41,7 +41,7 @@ namespace PortKiller
             Do_Process();
         }
 
-        private void Do_Process()
+        private bool Do_Process()
         {
             // 清空之前的数据
             this.BindDataGridView.Rows.Clear();
@@ -50,13 +50,13 @@ namespace PortKiller
             if (PortInputText.Length == 0)
             {
                 MessageBox.Show("请输入端口号", "提示", MessageBoxButtons.OK);
-                return;
+                return false;
             }
 
             if (!Check_Port(PortInputText))
             {
                 MessageBox.Show("端口号范围1-65535, 请确认", "提示", MessageBoxButtons.OK);
-                return;
+                return false;
             }
 
             int port;
@@ -80,7 +80,7 @@ namespace PortKiller
             if (process_list.Count == 0)
             {
                 MessageBox.Show("端口[" + port + "]未被占用", "提示", MessageBoxButtons.OK);
-                return;
+                return false;
             }
 
             // 填充数据到窗体
@@ -99,6 +99,7 @@ namespace PortKiller
                 this.BindDataGridView.Rows[i].Cells[3].Value = dataBean.Space;
                 i++;
             }
+            return true;
         }
 
         private static Process Get_Process(string fileName)
@@ -262,6 +263,15 @@ namespace PortKiller
                 "主页：https://github.com/niushuai233\n" +
                 "邮箱：shuai.niu@foxmail.com", 
                 "关于", MessageBoxButtons.OK);
+        }
+
+        private void SearchAndKillBtn_Click(object sender, EventArgs e)
+        {
+            bool do_res = Do_Process();
+            if (do_res)
+            {
+                kill();
+            }
         }
     }
 }

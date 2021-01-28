@@ -41,6 +41,7 @@ namespace PortKiller
             this.FillSpaceHead = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SearchAndKillBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.BindDataGridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -69,7 +70,7 @@ namespace PortKiller
             // 
             this.SearchBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.SearchBtn.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.SearchBtn.Location = new System.Drawing.Point(296, 37);
+            this.SearchBtn.Location = new System.Drawing.Point(229, 35);
             this.SearchBtn.Name = "SearchBtn";
             this.SearchBtn.Size = new System.Drawing.Size(75, 23);
             this.SearchBtn.TabIndex = 2;
@@ -80,7 +81,7 @@ namespace PortKiller
             // KillBtn
             // 
             this.KillBtn.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.KillBtn.Location = new System.Drawing.Point(391, 37);
+            this.KillBtn.Location = new System.Drawing.Point(310, 35);
             this.KillBtn.Name = "KillBtn";
             this.KillBtn.Size = new System.Drawing.Size(75, 23);
             this.KillBtn.TabIndex = 3;
@@ -166,12 +167,23 @@ namespace PortKiller
             this.AboutToolStripMenuItem.Text = "关于";
             this.AboutToolStripMenuItem.Click += new System.EventHandler(this.About_ToolStrip_Click);
             // 
+            // SearchAndKillBtn
+            // 
+            this.SearchAndKillBtn.Location = new System.Drawing.Point(391, 36);
+            this.SearchAndKillBtn.Name = "SearchAndKillBtn";
+            this.SearchAndKillBtn.Size = new System.Drawing.Size(75, 23);
+            this.SearchAndKillBtn.TabIndex = 6;
+            this.SearchAndKillBtn.Text = "一键查杀";
+            this.SearchAndKillBtn.UseVisualStyleBackColor = true;
+            this.SearchAndKillBtn.Click += new System.EventHandler(this.SearchAndKillBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(508, 251);
+            this.Controls.Add(this.SearchAndKillBtn);
             this.Controls.Add(this.BindDataGridView);
             this.Controls.Add(this.KillBtn);
             this.Controls.Add(this.SearchBtn);
@@ -207,6 +219,7 @@ namespace PortKiller
         private System.Windows.Forms.DataGridViewTextBoxColumn FillSpaceHead;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
+        private System.Windows.Forms.Button SearchAndKillBtn;
     }
 }
 
