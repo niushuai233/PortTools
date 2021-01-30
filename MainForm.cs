@@ -300,5 +300,17 @@ namespace PortKiller
                 MessageBox.Show(do_res, "提示", MessageBoxButtons.OK);
             }
         }
+
+        private void GoPortScanForm_Click(object sender, EventArgs e)
+        {
+            PortScanForm psf = new PortScanForm();
+            this.Hide();
+            psf.ShowDialog();
+        }
+
+        private void MainFormClosed_Event(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

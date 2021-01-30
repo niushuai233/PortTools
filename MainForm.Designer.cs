@@ -43,6 +43,7 @@ namespace PortKiller
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SearchAndKillBtn = new System.Windows.Forms.Button();
             this.tipsLabel = new System.Windows.Forms.Label();
+            this.PortScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.BindDataGridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -154,7 +155,8 @@ namespace PortKiller
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AboutToolStripMenuItem});
+            this.AboutToolStripMenuItem,
+            this.PortScanToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(508, 25);
@@ -187,6 +189,13 @@ namespace PortKiller
             this.tipsLabel.TabIndex = 7;
             this.tipsLabel.Text = "等待查询";
             // 
+            // PortScanToolStripMenuItem
+            // 
+            this.PortScanToolStripMenuItem.Name = "PortScanToolStripMenuItem";
+            this.PortScanToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.PortScanToolStripMenuItem.Text = "端口扫描";
+            this.PortScanToolStripMenuItem.Click += new System.EventHandler(this.GoPortScanForm_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -209,6 +218,7 @@ namespace PortKiller
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PortKiller v1.1 @niushuai233";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormClosed_Event);
             ((System.ComponentModel.ISupportInitialize)(this.BindDataGridView)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -232,6 +242,7 @@ namespace PortKiller
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.Button SearchAndKillBtn;
         private System.Windows.Forms.Label tipsLabel;
+        private System.Windows.Forms.ToolStripMenuItem PortScanToolStripMenuItem;
     }
 }
 
