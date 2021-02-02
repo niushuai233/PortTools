@@ -58,24 +58,24 @@ namespace PortKiller
             //testIpReg();
             // ip地址要求为ipv4地址
             // 起始ip是否合法
-            bool IpStartValid = CheckIp(this.IpStartTextBox.Text);
+            bool IpStartValid = Utils.CheckIp(this.IpStartTextBox.Text);
             if (!IpStartValid)
             {
-                Alert("起始IP不合法");
+                Utils.Alert_Tips("起始IP不合法");
                 this.IpStartTextBox.Focus();
                 return;
             }
             // 结束ip是否合法
-            bool IpEndValid = CheckIp(this.IpEndTextBox.Text);
+            bool IpEndValid = Utils.CheckIp(this.IpEndTextBox.Text);
             if (!IpEndValid)
             {
-                Alert("结束IP不合法");
+                Utils.Alert_Tips("结束IP不合法");
                 this.IpEndTextBox.Focus();
                 return;
             }
             if (!Check_Port(this.PortTextBox.Text))
             {
-                Alert("端口号输入错误, 请确认");
+                Utils.Alert_Tips("端口号输入错误, 请确认");
                 this.PortTextBox.Focus();
                 return;
             }
@@ -85,12 +85,36 @@ namespace PortKiller
 
             if (scanFlag)
             {
-                this.backgroundWorker1.RunWorkerAsync();
+                this.Start_Scan();
             } else
             {
-                this.backgroundWorker1.CancelAsync();
+                this.End_Scan();
             }
             scanFlag = !scanFlag;
+        }
+
+        private ScanForm Prepare_Data()
+        {
+            ScanForm form = new ScanForm();
+            form.ip_start = this.IpStartTextBox.Text;
+            form.ip_end = this.IpEndTextBox.Text;
+
+            form.ip_list = Get_Ip_List();
+            form.port_list = Get_Port_List();
+
+            form.timeout = int.Parse(this.TimeoutTextBox.Text);
+            form.thread_nums = int.Parse(this.ThreadTextBox.Text);
+            return form;
+        }
+
+        private List<string> Get_Ip_List()
+        {
+            return null;
+        }
+
+        private List<int> Get_Port_List()
+        {
+            return null;
         }
 
         private void Bgw1_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -121,11 +145,6 @@ namespace PortKiller
             }
         }
 
-        private bool CheckIp(string ip)
-        {
-            return Regex.IsMatch(ip, @"^((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)$"); ;
-        }
-
         private bool Check_Port(String PortStr)
         {
             int port;
@@ -135,33 +154,18 @@ namespace PortKiller
 
         private void End_Scan()
         {
+            this.backgroundWorker1.CancelAsync();
         }
 
         private void Start_Scan()
         {
             // 获取ip区间
-            List<string> ip_list = Get_Ip_Range();
+            List<string> ip_list = Get_Ip_List();
+
+            this.backgroundWorker1.RunWorkerAsync();
         }
 
-        private List<string> Get_Ip_Range()
-        {
-            List<string> ip_list = new List<string>();
-
-            
-
-
-            return ip_list;
-        }
-
-        private string Get_Ip(int i1, int i2, int i3, int i4)
-        {
-            return i1 + "." + i2 + "." + i3 + "."+ i4;
-        }
-
-        private void Alert(string text)
-        {
-            MessageBox.Show(text, "提示", MessageBoxButtons.OK);
-        }
+        
     }
 
 
