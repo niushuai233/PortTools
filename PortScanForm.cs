@@ -111,11 +111,11 @@ namespace PortKiller
                 // 每次迴圈讓程式休眠300毫秒
                 System.Threading.Thread.Sleep(100);
                 // 執行PerformStep()函式
-                
-                ((BackgroundWorker)sender).ReportProgress(x);
-                if (((BackgroundWorker)sender).CancellationPending)
+                BackgroundWorker tmp = ((BackgroundWorker) sender);
+                tmp.ReportProgress(x);
+                if (tmp.CancellationPending)
                 {
-                    ((BackgroundWorker)sender).ReportProgress(100);
+                    tmp.ReportProgress(100);
                     return;
                 }
             }
