@@ -57,7 +57,7 @@ namespace PortKiller
             changeBtn(true);
             if (do_res != null)
             {
-                MessageBox.Show(do_res, "提示", MessageBoxButtons.OK);
+                Utils.Alert_Tips(do_res);
             }
         }
 
@@ -273,10 +273,10 @@ namespace PortKiller
             process.Close();
             if (line.Contains("成功:"))
             {
-                MessageBox.Show("进程[" + row.Cells[2].Value + "]已杀死", "提示", MessageBoxButtons.OK);
+                Utils.Alert_Tips("进程[" + row.Cells[2].Value + "]已杀死");
             } else
             {
-                MessageBox.Show("进程[" + row.Cells[2].Value + "]查杀失败, 请尝试以管理员权限运行", "提示", MessageBoxButtons.OK);
+                Utils.Alert_Tips("进程[" + row.Cells[2].Value + "]查杀失败, 请尝试以管理员权限运行");
             }
             changeTipsText("进程查杀完成");
         }
