@@ -147,9 +147,7 @@ namespace PortKiller
 
         private bool Check_Port(String PortStr)
         {
-            int port;
-            // return int.TryParse(PortStr, out port) && port != 0 && port <= 65535;
-            return true;
+            return PortStr != null && PortStr.Length > 0;
         }
 
         private void End_Scan()

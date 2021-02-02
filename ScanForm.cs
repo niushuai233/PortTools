@@ -16,7 +16,7 @@ namespace PortKiller
         /// </summary>
         public string ip_end { set; get; }
         /// <summary>
-        /// ip地址列表
+        /// IP地址列表
         /// </summary>
         public List<string> ip_list { set; get; }
         /// <summary>
