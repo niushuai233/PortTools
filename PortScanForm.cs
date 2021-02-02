@@ -83,24 +83,19 @@ namespace PortKiller
             this.ScanBtn.Text = scanFlag ? "停止" : "扫描";
             this.Refresh();
 
-            BackgroundWorker bgw1 = new BackgroundWorker();
-            bgw1.WorkerReportsProgress = true;
-            bgw1.WorkerSupportsCancellation = true;
-            bgw1.DoWork += Bgw1_DoWork;
-            bgw1.ProgressChanged += Bgw1_ProgressChanged;
-            bgw1.RunWorkerCompleted += Bgw1_RunWorkerCompleted;
             if (scanFlag)
             {
-                bgw1.RunWorkerAsync();
+                this.backgroundWorker1.RunWorkerAsync();
             } else
             {
-                bgw1.CancelAsync();
+                this.backgroundWorker1.CancelAsync();
             }
             scanFlag = !scanFlag;
         }
 
         private void Bgw1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            this.ScanProgressBar.Value = e.ProgressPercentage;
         }
 
         private void Bgw1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -111,16 +106,18 @@ namespace PortKiller
      
         private void Bgw1_DoWork(object sender, DoWorkEventArgs e)
         {
-            this.ScanProgressBar.Visible = true;
-            this.ScanProgressBar.Maximum = 100;
-            this.ScanProgressBar.Step = 1;
-            this.ScanProgressBar.Value = 0;
             for (int x = 1; x <= 100; x++)
             {
                 // 每次迴圈讓程式休眠300毫秒
                 System.Threading.Thread.Sleep(100);
                 // 執行PerformStep()函式
-                this.ScanProgressBar.PerformStep();
+                
+                ((BackgroundWorker)sender).ReportProgress(x);
+                if (((BackgroundWorker)sender).CancellationPending)
+                {
+                    ((BackgroundWorker)sender).ReportProgress(100);
+                    return;
+                }
             }
         }
 

@@ -49,6 +49,7 @@ namespace PortKiller
             this.PortKillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ScanProgressBar = new System.Windows.Forms.ProgressBar();
             this.ScanBtn = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.InfoGroupBox.SuspendLayout();
             this.ResultGroupBox.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -225,6 +226,7 @@ namespace PortKiller
             this.ScanProgressBar.Location = new System.Drawing.Point(10, 250);
             this.ScanProgressBar.Name = "ScanProgressBar";
             this.ScanProgressBar.Size = new System.Drawing.Size(393, 10);
+            this.ScanProgressBar.Step = 1;
             this.ScanProgressBar.TabIndex = 3;
             // 
             // ScanBtn
@@ -236,6 +238,14 @@ namespace PortKiller
             this.ScanBtn.Text = "扫描";
             this.ScanBtn.UseVisualStyleBackColor = true;
             this.ScanBtn.Click += new System.EventHandler(this.ScanBtn_Click);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Bgw1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.Bgw1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.Bgw1_RunWorkerCompleted);
             // 
             // PortScanForm
             // 
@@ -288,5 +298,6 @@ namespace PortKiller
         private System.Windows.Forms.TextBox IpStartTextBox;
         private System.Windows.Forms.Label MillsLabel;
         private System.Windows.Forms.Button ScanBtn;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
