@@ -112,6 +112,7 @@ namespace PortKiller
             this.PortTextBox.Size = new System.Drawing.Size(112, 20);
             this.PortTextBox.TabIndex = 7;
             this.PortTextBox.Text = "22,80,8080-8088";
+            this.PortTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Port_KeyPress);
             // 
             // IpEndTextBox
             // 

@@ -152,18 +152,35 @@ namespace PortKiller
 
         private void End_Scan()
         {
-            this.backgroundWorker1.CancelAsync();
+            if (this.backgroundWorker1.IsBusy) { 
+                this.backgroundWorker1.CancelAsync();
+            }
         }
 
         private void Start_Scan()
         {
-            // 获取ip区间
-            List<string> ip_list = Get_Ip_List();
-
-            this.backgroundWorker1.RunWorkerAsync();
+            this.backgroundWorker1.RunWorkerAsync(Prepare_Data());
         }
 
-        
+        private void Port_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // 中文逗号转英文逗号
+            if ((int)e.KeyChar == 65292 || (int)e.KeyChar == 44)
+            {
+                e.KeyChar = (char)44;
+            }
+            else if ((int)e.KeyChar == 8212 || (int)e.KeyChar == 45)
+            {
+                e.KeyChar = (char)45;
+            }
+            else if (e.KeyChar == (char)Keys.Back)
+            {
+            }
+            else if (!Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
     }
 
 
