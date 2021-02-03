@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -86,6 +88,38 @@ namespace PortKiller
         public static bool CheckPort(int port)
         {
             return port > 0 && port <= 65535;
+        }
+
+        internal static bool CanConnect(string ip, int port, int timeout)
+        {
+            IPAddress ipAddress = IPAddress.Parse(ip);
+
+            IPEndPoint endPoint = new IPEndPoint(ipAddress, port);
+
+            try
+            {
+
+                Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IAsyncResult asyncResult = sock.BeginConnect(endPoint, null, null);
+
+                asyncResult.AsyncWaitHandle.WaitOne(timeout, true);
+                if (asyncResult.IsCompleted)
+                {
+                    // 连接成功
+                    Console.WriteLine(ip + ":" + port + " if 连接: " + true);
+                    sock.Close();
+                    return true;
+                } else
+                {
+                    // 连接失败
+                    Console.WriteLine(ip + ":" + port + " else 连接: " + false);
+                    return false;
+                }
+            } catch(SocketException e)
+            {
+                Console.WriteLine(ip + ":" + port + " exception 连接: " + false);
+                return false;
+            }
         }
     }
 }

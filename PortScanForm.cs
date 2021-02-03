@@ -80,9 +80,6 @@ namespace PortKiller
                 return;
             }
 
-            this.ScanBtn.Text = scanFlag ? "停止" : "扫描";
-            this.Refresh();
-
             if (scanFlag)
             {
                 this.ResultRichTextBox.Clear();
@@ -93,12 +90,19 @@ namespace PortKiller
                     Utils.Alert_Tips(check_res);
                     return;
                 }
+                // 开始前 置为停止
+                this.ScanBtn.Text = "停止";
+                this.Refresh();
+                scanFlag = false;
                 this.Start_Scan(form);
             } else
             {
-                this.End_Scan();
+                // this.End_Scan();
+                // 结束后 置为扫描
+                this.ScanBtn.Text = "扫描";
+                this.Refresh();
+                scanFlag = true;
             }
-            scanFlag = !scanFlag;
         }
 
         private string Prepare_Data(ScanForm form)
@@ -186,7 +190,7 @@ namespace PortKiller
                 string[] port_split_twice = tmp_str.Split('-');
                 int t1 = int.Parse(port_split_twice[0]);
                 int t2 = int.Parse(port_split_twice[1]);
-                if (Utils.CheckPort(t1) || Utils.CheckPort(t2) || t1 > t2)
+                if (!Utils.CheckPort(t1) || !Utils.CheckPort(t2) || t1 > t2)
                 {
                     return "端口号不合法";
                 }
@@ -214,17 +218,37 @@ namespace PortKiller
         {
             this.ScanBtn.Text = "扫描";
             this.Refresh();
+            scanFlag = true;
         }
      
         private void Bgw1_DoWork(object sender, DoWorkEventArgs e)
         {
-            for (int x = 1; x <= 100; x++)
+            this.ResultRichTextBox.Clear();
+            ScanForm form = (ScanForm) e.Argument;
+
+            for(var ipIndex = 0; ipIndex < form.ip_list.Count; ipIndex++)
+            {
+                string ip = form.ip_list.ElementAt(ipIndex);
+                for (var portIndex = 0; portIndex < form.port_list.Count; portIndex++)
+                {
+                    int port = form.port_list.ElementAt(portIndex);
+
+                    bool can_connect = Utils.CanConnect(ip, port, form.timeout);
+
+                    if (can_connect)
+                    {
+                        this.ResultRichTextBox.AppendText(ip +":" + port + "\n");
+                    }
+                }
+            }
+
+            for (int x = 1; x <= 10; x++)
             {
                 // 每次迴圈讓程式休眠300毫秒
                 System.Threading.Thread.Sleep(100);
                 // 執行PerformStep()函式
                 BackgroundWorker tmp = ((BackgroundWorker) sender);
-                tmp.ReportProgress(x);
+                tmp.ReportProgress(x * 10);
                 if (tmp.CancellationPending)
                 {
                     tmp.ReportProgress(100);
