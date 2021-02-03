@@ -82,5 +82,10 @@ namespace PortKiller
                 + "." + Convert.ToString(ui4);
             return IP_Str;
         }
+
+        public static bool CheckPort(int port)
+        {
+            return port > 0 && port <= 65535;
+        }
     }
 }

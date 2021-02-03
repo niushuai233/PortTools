@@ -85,7 +85,15 @@ namespace PortKiller
 
             if (scanFlag)
             {
-                this.Start_Scan();
+                this.ResultRichTextBox.Clear();
+                ScanForm form = new ScanForm();
+                string check_res = Prepare_Data(form);
+                if (check_res != null)
+                {
+                    Utils.Alert_Tips(check_res);
+                    return;
+                }
+                this.Start_Scan(form);
             } else
             {
                 this.End_Scan();
@@ -93,21 +101,24 @@ namespace PortKiller
             scanFlag = !scanFlag;
         }
 
-        private ScanForm Prepare_Data()
+        private string Prepare_Data(ScanForm form)
         {
-            ScanForm form = new ScanForm();
             form.ip_start = this.IpStartTextBox.Text;
             form.ip_end = this.IpEndTextBox.Text;
 
-            form.ip_list = Get_Ip_List();
-            form.port_list = Get_Port_List();
+            string ip_res = Get_Ip_List(form);
+            string port_res = Get_Port_List(form);
+            if (port_res != null)
+            {
+                return port_res;
+            }
 
             form.timeout = int.Parse(this.TimeoutTextBox.Text);
             form.thread_nums = int.Parse(this.ThreadTextBox.Text);
-            return form;
+            return null;
         }
 
-        private List<string> Get_Ip_List()
+        private string Get_Ip_List(ScanForm form)
         {
             List<string> ip_list = new List<string>();
             string startText = this.IpStartTextBox.Text;
@@ -120,15 +131,41 @@ namespace PortKiller
                 ip_list.Add(Utils.UIntToIP(tmp_ip));
             }
 
-            return ip_list;
+            form.ip_list = ip_list;
+            return null;
         }
-        // 正观新闻
-        private List<int> Get_Port_List()
+        private string Get_Port_List(ScanForm form)
         {
             // 22,80,8080-8088
             List<int> port_list = new List<int>();
 
             string portText = this.PortTextBox.Text;
+
+            // 检查portText的合法性
+            char[] char_arr = portText.ToCharArray();
+            // 上个字符是否为符号
+            bool lastCharIsSymbol = false;
+            for(var index = 0; index < char_arr.Length; index++)
+            {
+                char _char = char_arr[index];
+                // 当前字符是否为符号
+                bool isSymbol = !Char.IsDigit(_char);
+                if (lastCharIsSymbol && isSymbol)
+                {
+                    return "端口号不合法";
+                }
+                else if (isSymbol)
+                {
+                    // 是符号 置true
+                    lastCharIsSymbol = true;
+                }
+                else
+                {
+                    // 不是符号 置false
+                    lastCharIsSymbol = false;
+                }
+            }
+
             string[] port_split_first = portText.Split(',');
 
             for(var i = 0; i < port_split_first.Length; i++)
@@ -137,14 +174,24 @@ namespace PortKiller
                 // 不包含 - 时直接添加跳过
                 if (!tmp_str.Contains("-"))
                 {
-                    port_list.Add(int.Parse(tmp_str));
+                    int tmp_port = int.Parse(tmp_str);
+                    if (!Utils.CheckPort(tmp_port))
+                    {
+                        return "端口号不合法";
+                    }
+                    port_list.Add(tmp_port);
                     continue;
                 }
 
                 string[] port_split_twice = tmp_str.Split('-');
+                int t1 = int.Parse(port_split_twice[0]);
+                int t2 = int.Parse(port_split_twice[1]);
+                if (Utils.CheckPort(t1) || Utils.CheckPort(t2) || t1 > t2)
+                {
+                    return "端口号不合法";
+                }
                 // 按照-分隔的要获取它中间的所有端口
-
-                for (var j = int.Parse(port_split_twice[0]); j <= int.Parse(port_split_twice[1]); j++)
+                for (var j = t1; j <= t2; j++)
                 {
                     // 添加端口
                     port_list.Add(j);
@@ -154,7 +201,8 @@ namespace PortKiller
             {
                 this.ResultRichTextBox.AppendText(item + "\n");
             });
-            return port_list;
+            form.port_list = port_list;
+            return null;
         }
 
         private void Bgw1_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -197,9 +245,9 @@ namespace PortKiller
             }
         }
 
-        private void Start_Scan()
+        private void Start_Scan(ScanForm scanForm)
         {
-            this.backgroundWorker1.RunWorkerAsync(Prepare_Data());
+            this.backgroundWorker1.RunWorkerAsync(scanForm);
         }
 
         private void Port_KeyPress(object sender, KeyPressEventArgs e)
