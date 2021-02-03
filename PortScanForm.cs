@@ -75,7 +75,7 @@ namespace PortKiller
             }
             if (!Check_Port(this.PortTextBox.Text))
             {
-                Utils.Alert_Tips("端口号输入错误, 请确认");
+                Utils.Alert_Tips("端口号不合法");
                 this.PortTextBox.Focus();
                 return;
             }
@@ -109,12 +109,52 @@ namespace PortKiller
 
         private List<string> Get_Ip_List()
         {
-            return null;
-        }
+            List<string> ip_list = new List<string>();
+            string startText = this.IpStartTextBox.Text;
+            string endText = this.IpEndTextBox.Text;
 
+            uint ustart = Utils.Ip2UInt(startText);
+            uint uend = Utils.Ip2UInt(endText);
+            for(var tmp_ip = ustart; tmp_ip <= uend; tmp_ip++)
+            {
+                ip_list.Add(Utils.UIntToIP(tmp_ip));
+            }
+
+            return ip_list;
+        }
+        // 正观新闻
         private List<int> Get_Port_List()
         {
-            return null;
+            // 22,80,8080-8088
+            List<int> port_list = new List<int>();
+
+            string portText = this.PortTextBox.Text;
+            string[] port_split_first = portText.Split(',');
+
+            for(var i = 0; i < port_split_first.Length; i++)
+            {
+                string tmp_str = port_split_first[i];
+                // 不包含 - 时直接添加跳过
+                if (!tmp_str.Contains("-"))
+                {
+                    port_list.Add(int.Parse(tmp_str));
+                    continue;
+                }
+
+                string[] port_split_twice = tmp_str.Split('-');
+                // 按照-分隔的要获取它中间的所有端口
+
+                for (var j = int.Parse(port_split_twice[0]); j <= int.Parse(port_split_twice[1]); j++)
+                {
+                    // 添加端口
+                    port_list.Add(j);
+                }
+            }
+            port_list.ForEach(item =>
+            {
+                this.ResultRichTextBox.AppendText(item + "\n");
+            });
+            return port_list;
         }
 
         private void Bgw1_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -167,17 +207,53 @@ namespace PortKiller
             // 中文逗号转英文逗号
             if ((int)e.KeyChar == 65292 || (int)e.KeyChar == 44)
             {
+                // 按了逗号键
                 e.KeyChar = (char)44;
             }
             else if ((int)e.KeyChar == 8212 || (int)e.KeyChar == 45)
             {
+                // 按了短横线键
                 e.KeyChar = (char)45;
             }
             else if (e.KeyChar == (char)Keys.Back)
             {
+                // 按了退格键
             }
             else if (!Char.IsDigit(e.KeyChar))
             {
+                // 非数字
+                e.Handled = true;
+            }
+        }
+
+        private void ip_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // 中文句号转英文句号
+            if ((int)e.KeyChar == 12290 || (int)e.KeyChar == 46)
+            {
+                // 按了逗号键
+                e.KeyChar = (char)46;
+            }
+            else if (e.KeyChar == (char)Keys.Back)
+            {
+                // 按了退格键
+            }
+            else if (!Char.IsDigit(e.KeyChar))
+            {
+                // 非数字
+                e.Handled = true;
+            }
+        }
+
+        private void num_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Back)
+            {
+                // 按了退格键
+            }
+            else if (!Char.IsDigit(e.KeyChar))
+            {
+                // 非数字
                 e.Handled = true;
             }
         }

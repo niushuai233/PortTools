@@ -89,20 +89,24 @@ namespace PortKiller
             // 
             this.ThreadTextBox.Enabled = false;
             this.ThreadTextBox.Location = new System.Drawing.Point(55, 136);
+            this.ThreadTextBox.MaxLength = 3;
             this.ThreadTextBox.Multiline = true;
             this.ThreadTextBox.Name = "ThreadTextBox";
             this.ThreadTextBox.Size = new System.Drawing.Size(112, 20);
             this.ThreadTextBox.TabIndex = 9;
             this.ThreadTextBox.Text = "1";
+            this.ThreadTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.num_KeyPress);
             // 
             // TimeoutTextBox
             // 
             this.TimeoutTextBox.Location = new System.Drawing.Point(55, 106);
+            this.TimeoutTextBox.MaxLength = 3;
             this.TimeoutTextBox.Multiline = true;
             this.TimeoutTextBox.Name = "TimeoutTextBox";
             this.TimeoutTextBox.Size = new System.Drawing.Size(75, 20);
             this.TimeoutTextBox.TabIndex = 8;
             this.TimeoutTextBox.Text = "200";
+            this.TimeoutTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.num_KeyPress);
             // 
             // PortTextBox
             // 
@@ -122,6 +126,7 @@ namespace PortKiller
             this.IpEndTextBox.Size = new System.Drawing.Size(112, 20);
             this.IpEndTextBox.TabIndex = 6;
             this.IpEndTextBox.Text = "127.0.0.1";
+            this.IpEndTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ip_KeyPress);
             // 
             // IpStartTextBox
             // 
@@ -131,6 +136,7 @@ namespace PortKiller
             this.IpStartTextBox.Size = new System.Drawing.Size(112, 20);
             this.IpStartTextBox.TabIndex = 5;
             this.IpStartTextBox.Text = "127.0.0.1";
+            this.IpStartTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ip_KeyPress);
             // 
             // ThreadLabel
             // 

@@ -40,5 +40,47 @@ namespace PortKiller
         {
             return i1 + "." + i2 + "." + i3 + "." + i4;
         }
+
+
+        public static uint Ip2UInt(string ip)
+        {
+            string disjunctiveStr = ".,: ";
+            char[] delimiter = disjunctiveStr.ToCharArray();
+            string[] ip_arr = null;
+            for (int i = 1; i <= 5; i++)
+            {
+                ip_arr = ip.Split(delimiter, i);
+            }
+            string a1 = ip_arr[0].ToString();
+            string a2 = ip_arr[1].ToString();
+            string a3 = ip_arr[2].ToString();
+            string a4 = ip_arr[3].ToString();
+            uint U1 = uint.Parse(a1);
+            uint U2 = uint.Parse(a2);
+            uint U3 = uint.Parse(a3);
+            uint U4 = uint.Parse(a4);
+
+            uint U = U1 << 24;
+            U += U2 << 16;
+            U += U3 << 8;
+            U += U4;
+            return U;
+        }
+
+        public static string UIntToIP(uint ipAddress)
+        {
+            long ui1 = ipAddress & 0xFF000000;
+            ui1 >>= 24;
+            long ui2 = ipAddress & 0x00FF0000;
+            ui2 >>= 16;
+            long ui3 = ipAddress & 0x0000FF00;
+            ui3 >>= 8;
+            long ui4 = ipAddress & 0x000000FF;
+            string IP_Str = Convert.ToString(ui1) + "."
+                + Convert.ToString(ui2) + "."
+                + Convert.ToString(ui3)
+                + "." + Convert.ToString(ui4);
+            return IP_Str;
+        }
     }
 }
