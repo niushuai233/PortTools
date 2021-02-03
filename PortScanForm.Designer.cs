@@ -50,6 +50,7 @@ namespace PortKiller
             this.ScanProgressBar = new System.Windows.Forms.ProgressBar();
             this.ScanBtn = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.ProcessLabel = new System.Windows.Forms.Label();
             this.InfoGroupBox.SuspendLayout();
             this.ResultGroupBox.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -254,12 +255,22 @@ namespace PortKiller
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.Bgw1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.Bgw1_RunWorkerCompleted);
             // 
+            // ProcessLabel
+            // 
+            this.ProcessLabel.AutoSize = true;
+            this.ProcessLabel.Location = new System.Drawing.Point(13, 217);
+            this.ProcessLabel.Name = "ProcessLabel";
+            this.ProcessLabel.Size = new System.Drawing.Size(11, 12);
+            this.ProcessLabel.TabIndex = 5;
+            this.ProcessLabel.Text = " ";
+            // 
             // PortScanForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(415, 266);
+            this.Controls.Add(this.ProcessLabel);
             this.Controls.Add(this.ScanBtn);
             this.Controls.Add(this.ScanProgressBar);
             this.Controls.Add(this.ResultGroupBox);
@@ -306,5 +317,6 @@ namespace PortKiller
         private System.Windows.Forms.Label MillsLabel;
         private System.Windows.Forms.Button ScanBtn;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Label ProcessLabel;
     }
 }

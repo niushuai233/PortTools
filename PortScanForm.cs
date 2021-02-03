@@ -91,17 +91,13 @@ namespace PortKiller
                     return;
                 }
                 // 开始前 置为停止
-                this.ScanBtn.Text = "停止";
-                this.Refresh();
-                scanFlag = false;
+                Change_Search_Btn_Text("停止", false);
                 this.Start_Scan(form);
             } else
             {
-                // this.End_Scan();
+                this.End_Scan();
                 // 结束后 置为扫描
-                this.ScanBtn.Text = "扫描";
-                this.Refresh();
-                scanFlag = true;
+                Change_Search_Btn_Text("扫描", true);
             }
         }
 
@@ -201,10 +197,10 @@ namespace PortKiller
                     port_list.Add(j);
                 }
             }
-            port_list.ForEach(item =>
-            {
-                this.ResultRichTextBox.AppendText(item + "\n");
-            });
+            //port_list.ForEach(item =>
+            //{
+            //    this.ResultRichTextBox.AppendText(item + "\n");
+            //});
             form.port_list = port_list;
             return null;
         }
@@ -216,9 +212,7 @@ namespace PortKiller
 
         private void Bgw1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.ScanBtn.Text = "扫描";
-            this.Refresh();
-            scanFlag = true;
+            Console.WriteLine("scan complete");
         }
      
         private void Bgw1_DoWork(object sender, DoWorkEventArgs e)
@@ -226,6 +220,9 @@ namespace PortKiller
             this.ResultRichTextBox.Clear();
             ScanForm form = (ScanForm) e.Argument;
 
+            long totalCount = form.ip_list.Count * form.port_list.Count;
+            long count = 0;
+            Console.WriteLine("totalCount: {0}", totalCount);
             for(var ipIndex = 0; ipIndex < form.ip_list.Count; ipIndex++)
             {
                 string ip = form.ip_list.ElementAt(ipIndex);
@@ -233,28 +230,54 @@ namespace PortKiller
                 {
                     int port = form.port_list.ElementAt(portIndex);
 
+                    // 判断是否可通
                     bool can_connect = Utils.CanConnect(ip, port, form.timeout);
 
                     if (can_connect)
                     {
+                        // 写到结果框中
                         this.ResultRichTextBox.AppendText(ip +":" + port + "\n");
                     }
-                }
-            }
 
-            for (int x = 1; x <= 10; x++)
-            {
-                // 每次迴圈讓程式休眠300毫秒
-                System.Threading.Thread.Sleep(100);
-                // 執行PerformStep()函式
-                BackgroundWorker tmp = ((BackgroundWorker) sender);
-                tmp.ReportProgress(x * 10);
-                if (tmp.CancellationPending)
-                {
-                    tmp.ReportProgress(100);
-                    return;
+                    // 获取比率更新进度条  感觉想复杂了
+                    decimal A = count;
+                    decimal B = totalCount;
+
+                    decimal T = decimal.Parse((A / B).ToString("0.00"));
+
+                    BackgroundWorker tmp = ((BackgroundWorker) sender);
+                    tmp.ReportProgress(Convert.ToInt32(T * 100));
+
+                    Console.WriteLine("percentage: {0}, CancellationPending: {1}", Convert.ToInt32(T * 100), tmp.CancellationPending);
+                    this.ProcessLabel.Text = "当前:" + ip + ":" + port + "\n" + "总计: " + count + "/" + totalCount;
+                    if (tmp.CancellationPending)
+                    {
+                        Console.WriteLine("按了停止按钮");
+                        tmp.ReportProgress(0);
+                        this.ProcessLabel.Text = " ";
+
+                        Change_Search_Btn_Text("扫描", true);
+                        return;
+                    }
+
+                    count++;
                 }
+
             }
+            // 循环完成
+            ((BackgroundWorker)sender).ReportProgress(100);
+            this.ProcessLabel.Text = "";
+
+            Thread.Sleep(300);
+            Change_Search_Btn_Text("扫描", true);
+
+        }
+
+        private void Change_Search_Btn_Text(string text, bool _scanFlag)
+        {
+            this.ScanBtn.Text = text;
+            this.Refresh();
+            scanFlag = _scanFlag;
         }
 
         private bool Check_Port(String PortStr)
