@@ -1,5 +1,6 @@
-# PortKiller
-Windows 端口查杀工具
+# PortTools
+## 包含 PortScaner 和 PortKiller
+Windows 端口扫描工具& Windows 端口查杀工具
 
 找不到合适的，就自创一个
 
