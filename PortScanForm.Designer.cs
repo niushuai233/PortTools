@@ -127,7 +127,7 @@ namespace PortKiller
             this.IpEndTextBox.Size = new System.Drawing.Size(112, 20);
             this.IpEndTextBox.TabIndex = 6;
             this.IpEndTextBox.Text = "127.0.0.1";
-            this.IpEndTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ip_KeyPress);
+            // this.IpEndTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ip_KeyPress);
             // 
             // IpStartTextBox
             // 
@@ -137,7 +137,7 @@ namespace PortKiller
             this.IpStartTextBox.Size = new System.Drawing.Size(112, 20);
             this.IpStartTextBox.TabIndex = 5;
             this.IpStartTextBox.Text = "127.0.0.1";
-            this.IpStartTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ip_KeyPress);
+            // this.IpStartTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ip_KeyPress);
             // 
             // ThreadLabel
             // 
